@@ -74,6 +74,8 @@
   .commission-row .t.deal{background:#FFF1DD;color:var(--warn)}
   .commission-row .amt{flex:1;text-align:right;font-weight:700;color:var(--brand-d)}
   .plan-commission.none{color:var(--muted);font-size:12.5px;text-align:center;padding:8px 0 0}
+  .plan-commission .note{font-size:11px;color:var(--muted);font-style:italic;
+    margin-top:8px;padding-top:6px;border-top:1px dotted var(--line);line-height:1.4}
 
   .info-grid{display:flex;background:var(--brand-l);border-radius:13px;margin-top:14px;overflow:hidden}
   .info{flex:1;text-align:center;padding:18px 12px;border-right:1px solid rgba(4,139,186,.18)}
@@ -204,11 +206,25 @@ const SET_B = [
   {role:'導師', type:'flow', amount:15000},
   {role:'導師', type:'deal', amount:35000},
 ];
+const SET_MULTI_OFFICIAL = [
+  {role:'一般', type:'flow', amount:4500},
+  {role:'學員', type:'flow', amount:7500},
+  {role:'學員', type:'deal', amount:15000},
+  {role:'導師', type:'flow', amount:15000},
+  {role:'導師', type:'deal', amount:22500},
+];
+const SET_MENTOR_OFFICIAL = [
+  {role:'一般', type:'flow', amount:6000},
+  {role:'學員', type:'flow', amount:10000},
+  {role:'學員', type:'deal', amount:20000},
+  {role:'導師', type:'flow', amount:20000},
+  {role:'導師', type:'deal', amount:30000},
+];
 const DATA = {
   multi:{
     name:'學員班 · 一對多',
     plans:[
-      {name:'正式價格', price:150000, meta:'標準定價', commission:null},
+      {name:'正式價格', price:150000, flag:'has', flagText:'有分潤', meta:'標準定價', commission:SET_MULTI_OFFICIAL, commissionNote:'成交諮詢若需 Linda 出席，扣 5%'},
       {name:'推廣期價', price:100000, flag:'promo', flagText:'至 2026/6', meta:'推廣期', commission:SET_A},
       {name:'常態價', price:110000, flag:'has', flagText:'有分潤', meta:'2026/7 起', commission:SET_A},
     ]
@@ -223,7 +239,7 @@ const DATA = {
   mentor:{
     name:'導師班 · 一對多',
     plans:[
-      {name:'正式價格', price:200000, meta:'不含學員班', commission:null},
+      {name:'正式價格', price:200000, flag:'has', flagText:'有分潤', meta:'不含學員班', commission:SET_MENTOR_OFFICIAL, commissionNote:'成交諮詢若需 Linda 出席，扣 5%'},
       {name:'推廣加收', price:70000, flag:'promo', flagText:'至 2025/9', meta:'學員班＋7萬', commission:SET_A},
       {name:'常態加收', price:100000, flag:'has', flagText:'有分潤', meta:'2025/10 起｜學員班＋10萬', commission:SET_A},
     ]
@@ -252,6 +268,7 @@ function renderPlans(){
               '<span class="amt">$'+r.amount.toLocaleString()+'</span>'+
             '</div>'
           ).join('')+
+          (p.commissionNote ? '<div class="note">※ '+p.commissionNote+'</div>' : '')+
         '</div>';
       } else {
         commission = '<div class="plan-commission none">本方案無分潤</div>';

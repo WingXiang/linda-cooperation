@@ -271,7 +271,7 @@ function renderPlans(){
               '<span class="amt">$'+r.amount.toLocaleString()+' <small>('+pctStr+')</small></span>'+
             '</div>';
           }).join('')+
-          (p.commissionNote ? '<div class="note">※ '+p.commissionNote+'</div>' : '')+
+          '<div class="note">※ '+(p.commissionNote || '成交諮詢若需 Linda 出席，扣 5%')+'</div>'+
         '</div>';
       } else {
         commission = '<div class="plan-commission none">本方案無分潤</div>';

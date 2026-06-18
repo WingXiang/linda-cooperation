@@ -73,6 +73,7 @@
   .commission-row .t.flow{background:var(--brand-l);color:var(--brand-d)}
   .commission-row .t.deal{background:#FFF1DD;color:var(--warn)}
   .commission-row .amt{flex:1;text-align:right;font-weight:700;color:var(--brand-d)}
+  .commission-row .amt small{font-size:11px;color:var(--muted);font-weight:500;margin-left:3px}
   .plan-commission.none{color:var(--muted);font-size:12.5px;text-align:center;padding:8px 0 0}
   .plan-commission .note{font-size:11px;color:var(--muted);font-style:italic;
     margin-top:8px;padding-top:6px;border-top:1px dotted var(--line);line-height:1.4}
@@ -261,13 +262,15 @@ function renderPlans(){
       if(p.commission){
         commission = '<div class="plan-commission">'+
           '<div class="ct">分潤規則</div>'+
-          p.commission.map(r=>
-            '<div class="commission-row">'+
+          p.commission.map(r=>{
+            const pct = r.amount/p.price*100;
+            const pctStr = Math.abs(pct-Math.round(pct))<0.05 ? Math.round(pct)+'%' : pct.toFixed(1)+'%';
+            return '<div class="commission-row">'+
               '<span class="r">'+r.role+'</span>'+
               '<span class="t '+r.type+'">'+TYPE_LABEL[r.type]+'</span>'+
-              '<span class="amt">$'+r.amount.toLocaleString()+'</span>'+
-            '</div>'
-          ).join('')+
+              '<span class="amt">$'+r.amount.toLocaleString()+' <small>('+pctStr+')</small></span>'+
+            '</div>';
+          }).join('')+
           (p.commissionNote ? '<div class="note">※ '+p.commissionNote+'</div>' : '')+
         '</div>';
       } else {

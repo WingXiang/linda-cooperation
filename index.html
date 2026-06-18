@@ -225,8 +225,7 @@ const DATA = {
   multi:{
     name:'學員班 · 一對多',
     plans:[
-      {name:'正式價格', price:150000, flag:'has', flagText:'有分潤', meta:'標準定價', commission:SET_MULTI_OFFICIAL, commissionNote:'成交諮詢若需 Linda 出席，扣 5%'},
-      {name:'推廣期價', price:100000, flag:'promo', flagText:'至 2026/6', meta:'推廣期', commission:SET_A},
+      {name:'正式價格', price:150000, flag:'has', flagText:'有分潤', meta:'標準定價', commission:SET_MULTI_OFFICIAL, showPercent:true, commissionNote:'成交諮詢若需 Linda 出席，扣 5%'},
       {name:'常態價', price:110000, flag:'has', flagText:'有分潤', meta:'2026/7 起', commission:SET_A},
     ]
   },
@@ -240,8 +239,7 @@ const DATA = {
   mentor:{
     name:'導師班 · 一對多',
     plans:[
-      {name:'正式價格', price:200000, flag:'has', flagText:'有分潤', meta:'不含學員班', commission:SET_MENTOR_OFFICIAL, commissionNote:'成交諮詢若需 Linda 出席，扣 5%'},
-      {name:'推廣加收', price:70000, flag:'promo', flagText:'至 2025/9', meta:'學員班＋7萬', commission:SET_A},
+      {name:'正式價格', price:200000, flag:'has', flagText:'有分潤', meta:'不含學員班', commission:SET_MENTOR_OFFICIAL, showPercent:true, commissionNote:'成交諮詢若需 Linda 出席，扣 5%'},
       {name:'常態加收', price:100000, flag:'has', flagText:'有分潤', meta:'2025/10 起｜學員班＋10萬', commission:SET_A},
     ]
   }
@@ -263,12 +261,16 @@ function renderPlans(){
         commission = '<div class="plan-commission">'+
           '<div class="ct">感恩分潤</div>'+
           p.commission.map(r=>{
-            const pct = r.amount/p.price*100;
-            const pctStr = Math.abs(pct-Math.round(pct))<0.05 ? Math.round(pct)+'%' : pct.toFixed(1)+'%';
+            let amtHtml = '$'+r.amount.toLocaleString();
+            if(p.showPercent){
+              const pct = r.amount/p.price*100;
+              const pctStr = Math.abs(pct-Math.round(pct))<0.05 ? Math.round(pct)+'%' : pct.toFixed(1)+'%';
+              amtHtml += ' <small>('+pctStr+')</small>';
+            }
             return '<div class="commission-row">'+
               '<span class="r">'+r.role+'</span>'+
               '<span class="t '+r.type+'">'+TYPE_LABEL[r.type]+'</span>'+
-              '<span class="amt">$'+r.amount.toLocaleString()+' <small>('+pctStr+')</small></span>'+
+              '<span class="amt">'+amtHtml+'</span>'+
             '</div>';
           }).join('')+
           '<div class="note">※ '+(p.commissionNote || '成交諮詢若需 Linda 出席，扣 5%')+'</div>'+
